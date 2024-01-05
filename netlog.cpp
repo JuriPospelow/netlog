@@ -1,5 +1,8 @@
 #include <iostream>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
 using namespace std;
 
 int main(int argc, char** argv)
@@ -12,6 +15,19 @@ int main(int argc, char** argv)
     }
 
     cout << "read " << fileName << "\n";
+
+    boost::property_tree::ptree config;
+    try
+    {
+        read_ini(fileName, config);
+    }
+    catch (boost::property_tree::ini_parser_error& error)
+    {
+        std::cout
+            << error.message() << ": "
+            << error.filename() << ", line "
+            << error.line() << std::endl;
+    }
 
 return 0;
 }
