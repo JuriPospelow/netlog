@@ -20,6 +20,7 @@ int main(int argc, char** argv)
     try
     {
         read_ini(fileName, config);
+        cout << config.get<std::string>("net1.pc1_name") << ": " << config.get<std::string>("net1.pc1_addr") <<endl;
     }
     catch (boost::property_tree::ini_parser_error& error)
     {
