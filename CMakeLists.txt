@@ -17,7 +17,7 @@ if(Boost_FOUND)
     add_executable(
         netlog
         netlog.cpp
-        # Device.cpp
+        Device.cpp
         # Net.cpp
     )
     target_link_libraries(netlog ${Boost_LIBRARIES})
