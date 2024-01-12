@@ -13,7 +13,7 @@ using namespace std;
 
 class Nets {
 public:
-    Nets(string fileName);
+    explicit Nets(string fileName);
     int cnt_nets() const { return _cnt_nets; }
     vector<Net> nets{};
 private:
