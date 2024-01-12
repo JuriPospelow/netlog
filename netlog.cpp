@@ -56,7 +56,7 @@ Net Nets::create_net(int cnt_dev, const string& tmp_name)
     for(int i{0}; i < cnt_dev; ++i) {
         string name_prefix = tmp_name + to_string(i+1);
         tmp_net.devices.push_back({config.get<std::string>(name_prefix+"_name"), config.get<std::string>(name_prefix+"_addr")});
-
+        tmp_net.set_cnt_devs(cnt_dev);
         name_prefix = tmp_name;
     }
     return tmp_net;
@@ -74,11 +74,10 @@ int main(int argc, char** argv)
     cout << "read " << fileName << "\n";
 
     Nets nets(fileName);
-    int cnt_dev{2};
 
 #if 1
     for(int j{0}; j < nets.cnt_nets(); ++j) {
-        for(int i{0}; i < cnt_dev; ++i) {
+        for(int i{0}; i <  nets.nets[j].get_cnt_devs(); ++i) {
             cout << nets.nets[j].devices[i].name() << ": " << nets.nets[j].devices[i].ip() << endl;
         }
     }
