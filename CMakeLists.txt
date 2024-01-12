@@ -19,6 +19,7 @@ if(Boost_FOUND)
         netlog.cpp
         Device.cpp
         Net.cpp
+        Nets.cpp
     )
     target_link_libraries(netlog ${Boost_LIBRARIES})
 
