@@ -2,7 +2,8 @@
 
 #include <string>
 #include <vector>
-class Device;
+
+#include "Device.hpp"
 
 class Net {
 public:
