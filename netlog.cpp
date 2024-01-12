@@ -8,9 +8,49 @@
 
 using namespace std;
 
-    boost::property_tree::ptree config;
+// ToDo: push_back, smart_ptr
 
-Net create_net(int cnt_dev, const string& tmp_name)
+
+class Nets {
+public:
+    Nets(string fileName);
+    int cnt_nets() const { return _cnt_nets; }
+    vector<Net> nets{};
+private:
+    Net create_net(int cnt_dev, const string& tmp_name);
+    int _cnt_nets{};
+    boost::property_tree::ptree config;
+};
+
+Nets::Nets(string fileName)
+{
+    try
+    {
+        read_ini(fileName, config);
+
+        _cnt_nets = config.get<int>("nets.number");
+
+        for (int j{}; j < _cnt_nets; ++j) {
+            string net_name{"net"};
+            net_name += to_string(j+1);
+
+            int cnt_dev = config.get<int>(net_name+".number");
+            // string tmp_name {net_name+".pc"};
+
+            nets.push_back(create_net(cnt_dev, net_name+".pc"));
+            net_name = "net";
+        }
+    }
+    catch (boost::property_tree::ini_parser_error& error)
+    {
+        std::cout
+            << error.message() << ": "
+            << error.filename() << ", line "
+            << error.line() << std::endl;
+    }
+}
+
+Net Nets::create_net(int cnt_dev, const string& tmp_name)
 {
     Net tmp_net("tmp_net");
     for(int i{0}; i < cnt_dev; ++i) {
@@ -33,38 +73,13 @@ int main(int argc, char** argv)
 
     cout << "read " << fileName << "\n";
 
-    int cnt_dev{};
-    int cnt_net{};
-    vector<Net> nets{};
+    Nets nets(fileName);
+    int cnt_dev{2};
 
-    try
-    {
-        read_ini(fileName, config);
-
-        cnt_net = config.get<int>("nets.number");
-
-        for (int j{}; j < cnt_net; ++j) {
-            string net_name{"net"};
-            net_name += to_string(j+1);
-
-            cnt_dev = config.get<int>(net_name+".number");
-            // string tmp_name {net_name+".pc"};
-
-            nets.push_back(create_net(cnt_dev, net_name+".pc"));
-            net_name = "net";
-        }
-    }
-    catch (boost::property_tree::ini_parser_error& error)
-    {
-        std::cout
-            << error.message() << ": "
-            << error.filename() << ", line "
-            << error.line() << std::endl;
-    }
 #if 1
-    for(int j{0}; j < cnt_net; ++j) {
+    for(int j{0}; j < nets.cnt_nets(); ++j) {
         for(int i{0}; i < cnt_dev; ++i) {
-            cout << nets[j].devices[i].name() << ": " << nets[j].devices[i].ip() << endl;
+            cout << nets.nets[j].devices[i].name() << ": " << nets.nets[j].devices[i].ip() << endl;
         }
     }
 #endif
