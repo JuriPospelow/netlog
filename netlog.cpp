@@ -18,13 +18,8 @@ int main(int argc, char** argv)
     Nets nets(fileName);
     nets.readStatus();
 
-
 #if 1
-    for(int j{0}; j < nets.cnt_nets(); ++j) {
-        for(int i{0}; i <  nets.nets[j].get_cnt_devs(); ++i) {
-            cout << nets.nets[j].devices[i].name() << ": " << nets.nets[j].devices[i].ip() << endl;
-        }
-    }
+    nets.printIni();
 #endif
 return 0;
 }
