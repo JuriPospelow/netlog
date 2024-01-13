@@ -8,7 +8,7 @@
 class Net {
 public:
     explicit Net(std::string_view n)
-    : name {n} {}
+    : _name {n} {}
     void readStatus();
 
     void set_cnt_devs(int cnt_dev) { _cnt_devs = cnt_dev; }
@@ -21,6 +21,6 @@ public:
 private:
     int _cnt_devs{};
     std::string _net_adr{};
-    std::string name{};
-    std::string net_map{};
+    std::string _name{};
+    std::string _net_map{};
 };

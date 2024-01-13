@@ -11,7 +11,7 @@ void Net::readStatus()
     command += _net_adr;
     // net_map = exec(command.c_str());
     for (size_t i{}; i<devices.size(); ++i) {
-        devices[i].readStatus(net_map);
+        devices[i].readStatus(_net_map);
 #if 0
         devices[i].printAddr();
         cout << " " << devices[i].name() << " ";
