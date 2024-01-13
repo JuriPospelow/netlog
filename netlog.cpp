@@ -16,6 +16,8 @@ int main(int argc, char** argv)
     cout << "read " << fileName << "\n";
 
     Nets nets(fileName);
+    nets.readStatus();
+
 
 #if 1
     for(int j{0}; j < nets.cnt_nets(); ++j) {
