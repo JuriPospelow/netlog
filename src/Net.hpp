@@ -7,7 +7,7 @@
 
 class Net {
 public:
-    Net(std::string_view n)
+    explicit Net(std::string_view n)
     : name {n} {}
     void readStatus();
 
@@ -16,10 +16,11 @@ public:
     void set_net_adr(std::string net_adr) { _net_adr = net_adr; }
     std::string get_net_adr() const { return _net_adr; }
 
-    std::string name{};
     std::vector <Device> devices{};
-    std::string net_map{};
 
+private:
     int _cnt_devs{};
     std::string _net_adr{};
+    std::string name{};
+    std::string net_map{};
 };
