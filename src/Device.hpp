@@ -18,9 +18,9 @@ public:
         std::cout << "addr.:" << this << std::endl;
     }
 
-    std::string name() { return _name;}
-    std::string ip() { return _ip;}
-    std::string status() { return _status;}
+    std::string name() const { return _name;}
+    std::string ip() const { return _ip;}
+    std::string status() const { return _status;}
 
     void readStatus(std::string_view);
     void readStatusPing();
