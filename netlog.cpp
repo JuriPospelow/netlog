@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Nets.hpp"
+#include "src/Nets.hpp"
 
 using namespace std;
 

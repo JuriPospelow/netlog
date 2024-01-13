@@ -14,12 +14,14 @@ find_package(Boost 1.83.0)
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
-    add_executable(
+    # include_directories(${NETLOG_SOURCE_DIR}/src)
+
+   add_executable(
         netlog
         netlog.cpp
-        Device.cpp
-        Net.cpp
-        Nets.cpp
+        src/Device.cpp
+        src/Net.cpp
+        src/Nets.cpp
     )
     target_link_libraries(netlog ${Boost_LIBRARIES})
 
