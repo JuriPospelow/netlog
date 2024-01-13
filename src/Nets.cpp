@@ -55,3 +55,12 @@ void Nets::readStatus()
         // cout << nets[j].get_net_adr() << endl;
     }
 }
+
+void Nets::printIni() const
+{
+    for(int j{0}; j < _cnt_nets; ++j) {
+        for(int i{0}; i <  nets[j].get_cnt_devs(); ++i) {
+            cout << nets[j].devices[i].name() << ": " << nets[j].devices[i].ip() << endl;
+        }
+    }
+}
