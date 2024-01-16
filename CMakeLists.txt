@@ -10,7 +10,7 @@ set(Boost_INCLUDE_DIR  "/usr/local/vcpkg/installed/x64-linux/include")
 set(Boost_LIBRARY_DIR  "/usr/local/vcpkg/installed/x64-linux/lib")
 
 SET(Boost_DEBUG ON)
-find_package(Boost 1.83.0)
+find_package(Boost 1.83.0 COMPONENTS system thread)
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
