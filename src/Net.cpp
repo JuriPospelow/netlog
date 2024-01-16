@@ -4,15 +4,15 @@
 using namespace std;
 
 
-// #include "exec.hpp"
+#include "exec.hpp"
 void Net::readStatus()
 {
     string command {"nmap -sPn --version-light --osscan-limit "};
     command += _net_adr;
-    // net_map = exec(command.c_str());
+    _net_map = exec(command.c_str());
     for (size_t i{}; i<devices.size(); ++i) {
         devices[i].readStatus(_net_map);
-#if 0
+#if 1
         devices[i].printAddr();
         cout << " " << devices[i].name() << " ";
         cout << devices[i].ip() << " ";
