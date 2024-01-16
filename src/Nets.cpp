@@ -6,6 +6,8 @@
 
 using namespace std;
 
+// ToDo: use boost::asio for readStatus
+
 Nets::Nets(string fileName)
 {
     try
