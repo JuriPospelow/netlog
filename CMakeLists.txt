@@ -22,6 +22,7 @@ if(Boost_FOUND)
         src/Device.cpp
         src/Net.cpp
         src/Nets.cpp
+        src/exec.cpp
     )
     target_link_libraries(netlog ${Boost_LIBRARIES})
 
