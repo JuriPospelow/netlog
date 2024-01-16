@@ -3,7 +3,18 @@
 #include <memory>
 #include <stdexcept>
 
-std::string exec(const char* cmd) {
+#include <boost/process/system.hpp>
+#include <boost/process/io.hpp>
+
+// namespace bp = boost::process;
+
+
+std::string exec(const char* cmd)
+{
+    std::string result;
+    boost::process::system(cmd, boost::process::std_out > result);
+    return result;
+#if 0
     std::array<char, 128> buffer;
     std::string result;
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
@@ -14,4 +25,5 @@ std::string exec(const char* cmd) {
         result += buffer.data();
     }
     return result;
+#endif
 }
