@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     Nets nets(fileName);
     nets.readStatus();
 
-#if 1
+#if 0
     nets.printIni();
 #endif
 return 0;
