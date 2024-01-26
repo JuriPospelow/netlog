@@ -91,11 +91,11 @@ int main(int argc, char** argv)
     cout << "read " << fileName << "\n";
 
     Nets nets(fileName);
-    // nets.readStatus();
-
-    print(nets);
+    nets.readStatus();
+    nets.printCSV();
 
 #if 0
+    print(nets);
     nets.printIni();
 #endif
 return 0;

@@ -100,7 +100,7 @@ void init()
     // Construct the sink for file
     boost::shared_ptr< sinks::text_file_backend > backend =
         boost::make_shared< sinks::text_file_backend >(
-            keywords::file_name = "file.csv",
+            keywords::file_name = "netlog.csv",
             keywords::open_mode = std::ios_base::out | std::ios_base::app // appendig to file
         );
     backend->auto_flush(true);
@@ -134,13 +134,20 @@ void Nets::boostLogHead(tm* tm_ptr) const
     s += _jahr.str();
     BOOST_LOG(_lg) << s;
     BOOST_LOG(_lg) << ",,Testraum 3.1,,," << "\t\t\t" << "Testraum 3.2";
-    BOOST_LOG(_lg) << "\nDatum,,   pc1,  pc2,  pc3";
+
+    string tmp_head = "\nDatum,    ";
+	for (auto net : nets) {
+		for (auto dev : net.devices) {
+			tmp_head += ", " + dev.name();
+		}
+	}
+    BOOST_LOG(_lg) << tmp_head;
 }
 
 void Nets::logHead(tm* tm_ptr) const
 {
 // if file exists write head only to console
-    if(exists("file.csv")) {
+    if(exists("netlog.csv")) {
         BOOST_LOG_SCOPED_LOGGER_TAG(_lg, "Tag", "Tagged line"); // work only in the scope {}
         boostLogHead(tm_ptr);
     } else {
@@ -156,7 +163,16 @@ void Nets::logBody(tm *tm) const
 	stringstream _datum {};
 	_datum << put_time(tm, "%d.%m.%y");
 
-    BOOST_LOG(_lg) << _tag.str() << ", " << _datum.str() << ",  on,   off,  off";
+    string tmp_body = _tag.str() + ", " + _datum.str();
+    std::ostringstream tmp;
+
+	for (auto net : nets) {
+		for (auto dev : net.devices) {
+            tmp << setw(max(dev.name().size(), static_cast<size_t>(7) ));
+			tmp_body += tmp.str() + "," + dev.status();
+		}
+	}
+    BOOST_LOG(_lg) << tmp_body;
 }
 
 void Nets::printCSV() const
