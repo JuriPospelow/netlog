@@ -1,5 +1,20 @@
 #include <iostream>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 
+#include "boost/filesystem.hpp"
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
+#include <boost/log/sinks/text_file_backend.hpp>
+
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/expressions/formatters/csv_decorator.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/expressions/predicates/has_attr.hpp>
+#include <boost/log/attributes/scoped_attribute.hpp>
+#include <boost/core/null_deleter.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
 #include "Nets.hpp"
@@ -65,4 +80,92 @@ void Nets::printIni() const
             cout << nets[j].devices[i].name() << ": " << nets[j].devices[i].ip() << endl;
         }
     }
+}
+// ------------------------------------------------------------------------------------------------
+namespace keywords = boost::log::keywords;
+namespace sinks = boost::log::sinks;
+namespace expr = boost::log::expressions;
+
+using namespace boost::log;
+using namespace boost::filesystem;
+
+void init()
+{
+    // Construct the sink for console
+    typedef sinks::synchronous_sink< sinks::text_ostream_backend > text_sink;
+    boost::shared_ptr< text_sink > sink_console = boost::make_shared< text_sink >();
+    boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
+    sink_console->locked_backend()->add_stream(stream);
+
+    // Construct the sink for file
+    boost::shared_ptr< sinks::text_file_backend > backend =
+        boost::make_shared< sinks::text_file_backend >(
+            keywords::file_name = "file.csv",
+            keywords::open_mode = std::ios_base::out | std::ios_base::app // appendig to file
+        );
+    backend->auto_flush(true);
+    typedef sinks::synchronous_sink< sinks::text_file_backend > sink_t;
+    boost::shared_ptr< sink_t > sink_file(new sink_t(backend));
+    // we will not write to file the head, if that exists
+    sink_file->set_filter(!expr::has_attr("Tag"));
+    sink_file->set_formatter
+    (
+        expr::stream
+        // << expr::attr< unsigned int >("LineID") << ","
+        // << expr::csv_decor[ expr::stream << expr::attr< std::string >("Tag") ] << ","
+        << expr::csv_decor[ expr::stream << expr::message ] << ","
+    );
+
+    // Register the sink in the logging core
+    core::get()->add_sink(sink_file);
+    core::get()->add_sink(sink_console);
+}
+//]
+
+void Nets::boostLogHead(tm* tm_ptr) const
+{
+	stringstream _monat {};
+	 _monat << put_time(tm_ptr, "%B");
+	stringstream _jahr {};
+	_jahr << put_time(tm_ptr, "%Y");
+
+    std::string s = "\nStatus, des, Testnetzes,,,           ";
+    s += _monat.str() + ",,,   ";
+    s += _jahr.str();
+    BOOST_LOG(_lg) << s;
+    BOOST_LOG(_lg) << ",,Testraum 3.1,,," << "\t\t\t" << "Testraum 3.2";
+    BOOST_LOG(_lg) << "\nDatum,,   pc1,  pc2,  pc3";
+}
+
+void Nets::logHead(tm* tm_ptr) const
+{
+// if file exists write head only to console
+    if(exists("file.csv")) {
+        BOOST_LOG_SCOPED_LOGGER_TAG(_lg, "Tag", "Tagged line"); // work only in the scope {}
+        boostLogHead(tm_ptr);
+    } else {
+        boostLogHead(tm_ptr);
+    }
+}
+
+void Nets::logBody(tm *tm) const
+{
+	stringstream _tag {};
+	_tag << put_time(tm, "%a");
+
+	stringstream _datum {};
+	_datum << put_time(tm, "%d.%m.%y");
+
+    BOOST_LOG(_lg) << _tag.str() << ", " << _datum.str() << ",  on,   off,  off";
+}
+
+void Nets::printCSV() const
+{
+    init();
+
+	time_t t = time(NULL);
+	tm* tm = localtime(&t);
+
+    logHead(tm);
+    logBody(tm);
 }
