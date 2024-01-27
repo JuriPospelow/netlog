@@ -28,7 +28,10 @@ using namespace boost::filesystem;
 
 using namespace std;
 
-// ToDo: use boost::asio for readStatus
+/* ToDo: use boost::asio for readStatus
+        formating for console sink
+        value pcs in room for positioning room names in the log (header_adv)
+*/
 
 Nets::Nets(string fileName)
 {
