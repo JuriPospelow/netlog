@@ -38,28 +38,28 @@ Nets::Nets(string fileName)
     try
     {
         cout << "read " << "netlog.ini" << "\n";
-        read_ini("netlog.ini", app_config);
-        int room_nm = app_config.get<int>("log.room_number");
+        read_ini("netlog.ini", _app_config);
+        int room_nm = _app_config.get<int>("log.room_number");
         for (int j{}; j < room_nm; ++j) {
             string room_name{"log.room"};
             room_name += to_string(j+1);
-            _rooms.push_back(app_config.get<string>(room_name+"_name"));
+            _rooms.push_back(_app_config.get<string>(room_name+"_name"));
         }
 
         cout << "read " << fileName << "\n";
-        read_ini(fileName, config);
+        read_ini(fileName, _config);
 
-        _cnt_nets = config.get<int>("nets.number");
+        _cnt_nets = _config.get<int>("nets.number");
 
         for (int j{}; j < _cnt_nets; ++j) {
             string net_name{"net"};
             net_name += to_string(j+1);
 
-            int cnt_dev = config.get<int>(net_name+".number");
-            string tmp_addr = config.get<string>(net_name+".addr");
+            int cnt_dev = _config.get<int>(net_name+".number");
+            string tmp_addr = _config.get<string>(net_name+".addr");
             // string tmp_name {net_name+".pc"};
 
-            nets.push_back(create_net(cnt_dev, net_name+".pc", tmp_addr));
+            _nets.push_back(create_net(cnt_dev, net_name+".pc", tmp_addr));
             net_name = "net";
         }
     }
@@ -77,7 +77,7 @@ Net Nets::create_net(int cnt_dev, const string& tmp_name, const string& tmp_addr
     Net tmp_net("tmp_net");
     for(int i{0}; i < cnt_dev; ++i) {
         string name_prefix = tmp_name + to_string(i+1);
-        tmp_net.devices.push_back({config.get<std::string>(name_prefix+"_name"), config.get<std::string>(name_prefix+"_addr")});
+        tmp_net.devices.push_back({_config.get<std::string>(name_prefix+"_name"), _config.get<std::string>(name_prefix+"_addr")});
         tmp_net.set_cnt_devs(cnt_dev);
         tmp_net.set_net_adr(tmp_addr);
         name_prefix = tmp_name;
@@ -88,16 +88,16 @@ Net Nets::create_net(int cnt_dev, const string& tmp_name, const string& tmp_addr
 void Nets::readStatus()
 {
     for(int j{0}; j < _cnt_nets; ++j) {
-        nets[j].readStatus();
-        // cout << nets[j].get_net_adr() << endl;
+        _nets[j].readStatus();
+        // cout << _nets[j].get_net_adr() << endl;
     }
 }
 
 void Nets::printIni() const
 {
     for(int j{0}; j < _cnt_nets; ++j) {
-        for(int i{0}; i <  nets[j].get_cnt_devs(); ++i) {
-            cout << nets[j].devices[i].name() << ": " << nets[j].devices[i].ip() << endl;
+        for(int i{0}; i <  _nets[j].get_cnt_devs(); ++i) {
+            cout << _nets[j].devices[i].name() << ": " << _nets[j].devices[i].ip() << endl;
         }
     }
 }
@@ -155,7 +155,7 @@ void Nets::boostLogHead(tm* tm_ptr) const
     BOOST_LOG(_lg) << header_adv;
 
     string tmp_head = "\nDatum,";
-    for (auto net : nets) {
+    for (auto net : _nets) {
         for (auto dev : net.devices) {
             tmp_head += ", " + dev.name();
         }
@@ -185,7 +185,7 @@ void Nets::logBody(tm *tm) const
     string tmp_body = _tag.str() + ", " + _datum.str();
     std::ostringstream tmp;
 
-    for (auto net : nets) {
+    for (auto net : _nets) {
         for (auto dev : net.devices) {
             tmp << setw(max(dev.name().size(), static_cast<size_t>(7) ));
             tmp_body += tmp.str() + "," + dev.status();
