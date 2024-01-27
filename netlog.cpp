@@ -88,8 +88,6 @@ int main(int argc, char** argv)
 
     }
 
-    cout << "read " << fileName << "\n";
-
     Nets nets(fileName);
     nets.readStatus();
     nets.printCSV();
