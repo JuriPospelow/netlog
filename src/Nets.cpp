@@ -45,6 +45,8 @@ Nets::Nets(string fileName)
             room_name += to_string(j+1);
             _rooms.push_back(_app_config.get<string>(room_name+"_name"));
         }
+        _cmd_param = _app_config.get<string>("cmd.param");
+
 
         cout << "read " << fileName << "\n";
         read_ini(fileName, _config);
@@ -88,7 +90,7 @@ Net Nets::create_net(int cnt_dev, const string& tmp_name, const string& tmp_addr
 void Nets::readStatus()
 {
     for(int j{0}; j < _cnt_nets; ++j) {
-        _nets[j].readStatus();
+        _nets[j].readStatus(_cmd_param);
         // cout << _nets[j].get_net_adr() << endl;
     }
 }

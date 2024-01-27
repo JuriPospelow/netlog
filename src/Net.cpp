@@ -5,10 +5,10 @@ using namespace std;
 
 
 #include "exec.hpp"
-void Net::readStatus()
+void Net::readStatus(std::string& n)
 {
-    string command {"nmap -sPn --version-light --osscan-limit "};
-    command += _net_adr;
+    string command  = n;//{"nmap -sPn --version-light --osscan-limit "};
+    command = command + " " + _net_adr;
     cout << command.c_str() << endl;
     _net_map = exec(command.c_str());
     for (size_t i{}; i<devices.size(); ++i) {

@@ -9,7 +9,7 @@ class Net {
 public:
     explicit Net(std::string_view n)
     : _name {n} {}
-    void readStatus();
+    void readStatus(std::string& n);
 
     void set_cnt_devs(int cnt_dev) { _cnt_devs = cnt_dev; }
     int get_cnt_devs() const { return _cnt_devs; }

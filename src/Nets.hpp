@@ -22,6 +22,7 @@ private:
     boost::property_tree::ptree _app_config;
     mutable boost::log::sources::logger _lg;
     std::vector<Net> _nets{};
+    std::string _cmd_param{};
 
     Net create_net(int cnt_dev, const std::string& tmp_name, const std::string& );
     void logHead(tm* tm_ptr) const;
