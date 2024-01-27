@@ -149,9 +149,9 @@ void Nets::boostLogHead(tm* tm_ptr) const
         header_adv += _rooms[i];
         header_adv += ",,,";
     }
-    BOOST_LOG(_lg) << header_adv;//",,Testraum 3.1,,," << "\t\t\t" << "Testraum 3.2";
+    BOOST_LOG(_lg) << header_adv;
 
-    string tmp_head = "\nDatum,    ";
+    string tmp_head = "\nDatum,";
     for (auto net : nets) {
         for (auto dev : net.devices) {
             tmp_head += ", " + dev.name();
