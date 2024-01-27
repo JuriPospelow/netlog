@@ -18,7 +18,9 @@ public:
 
 private:
     int _cnt_nets{};
+    mutable std::vector<std::string> _rooms{};
     boost::property_tree::ptree config;
+    boost::property_tree::ptree app_config;
     mutable boost::log::sources::logger _lg;
 
     Net create_net(int cnt_dev, const std::string& tmp_name, const std::string& );

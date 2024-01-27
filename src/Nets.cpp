@@ -19,6 +19,13 @@
 
 #include "Nets.hpp"
 
+namespace keywords = boost::log::keywords;
+namespace sinks = boost::log::sinks;
+namespace expr = boost::log::expressions;
+
+using namespace boost::log;
+using namespace boost::filesystem;
+
 using namespace std;
 
 // ToDo: use boost::asio for readStatus
@@ -27,6 +34,16 @@ Nets::Nets(string fileName)
 {
     try
     {
+        cout << "read " << "netlog.ini" << "\n";
+        read_ini("netlog.ini", app_config);
+        int room_nm = app_config.get<int>("log.room_number");
+        for (int j{}; j < room_nm; ++j) {
+            string room_name{"log.room"};
+            room_name += to_string(j+1);
+            _rooms.push_back(app_config.get<string>(room_name+"_name"));
+        }
+
+        cout << "read " << fileName << "\n";
         read_ini(fileName, config);
 
         _cnt_nets = config.get<int>("nets.number");
@@ -82,12 +99,6 @@ void Nets::printIni() const
     }
 }
 // ------------------------------------------------------------------------------------------------
-namespace keywords = boost::log::keywords;
-namespace sinks = boost::log::sinks;
-namespace expr = boost::log::expressions;
-
-using namespace boost::log;
-using namespace boost::filesystem;
 
 void init()
 {
@@ -120,27 +131,32 @@ void init()
     core::get()->add_sink(sink_file);
     core::get()->add_sink(sink_console);
 }
-//]
 
 void Nets::boostLogHead(tm* tm_ptr) const
 {
-	stringstream _monat {};
-	 _monat << put_time(tm_ptr, "%B");
-	stringstream _jahr {};
-	_jahr << put_time(tm_ptr, "%Y");
+    stringstream _monat {};
+     _monat << put_time(tm_ptr, "%B");
+    stringstream _jahr {};
+    _jahr << put_time(tm_ptr, "%Y");
 
     std::string s = "\nStatus, des, Testnetzes,,,           ";
     s += _monat.str() + ",,,   ";
     s += _jahr.str();
     BOOST_LOG(_lg) << s;
-    BOOST_LOG(_lg) << ",,Testraum 3.1,,," << "\t\t\t" << "Testraum 3.2";
+
+    string header_adv = ",,";
+    for (int i{}; i < _rooms.size(); ++i){
+        header_adv += _rooms[i];
+        header_adv += ",,,";
+    }
+    BOOST_LOG(_lg) << header_adv;//",,Testraum 3.1,,," << "\t\t\t" << "Testraum 3.2";
 
     string tmp_head = "\nDatum,    ";
-	for (auto net : nets) {
-		for (auto dev : net.devices) {
-			tmp_head += ", " + dev.name();
-		}
-	}
+    for (auto net : nets) {
+        for (auto dev : net.devices) {
+            tmp_head += ", " + dev.name();
+        }
+    }
     BOOST_LOG(_lg) << tmp_head;
 }
 
@@ -157,21 +173,21 @@ void Nets::logHead(tm* tm_ptr) const
 
 void Nets::logBody(tm *tm) const
 {
-	stringstream _tag {};
-	_tag << put_time(tm, "%a");
+    stringstream _tag {};
+    _tag << put_time(tm, "%a");
 
-	stringstream _datum {};
-	_datum << put_time(tm, "%d.%m.%y");
+    stringstream _datum {};
+    _datum << put_time(tm, "%d.%m.%y");
 
     string tmp_body = _tag.str() + ", " + _datum.str();
     std::ostringstream tmp;
 
-	for (auto net : nets) {
-		for (auto dev : net.devices) {
+    for (auto net : nets) {
+        for (auto dev : net.devices) {
             tmp << setw(max(dev.name().size(), static_cast<size_t>(7) ));
-			tmp_body += tmp.str() + "," + dev.status();
-		}
-	}
+            tmp_body += tmp.str() + "," + dev.status();
+        }
+    }
     BOOST_LOG(_lg) << tmp_body;
 }
 
@@ -179,8 +195,8 @@ void Nets::printCSV() const
 {
     init();
 
-	time_t t = time(NULL);
-	tm* tm = localtime(&t);
+    time_t t = time(NULL);
+    tm* tm = localtime(&t);
 
     logHead(tm);
     logBody(tm);

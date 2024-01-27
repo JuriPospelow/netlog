@@ -9,6 +9,7 @@ void Net::readStatus()
 {
     string command {"nmap -sPn --version-light --osscan-limit "};
     command += _net_adr;
+    cout << command.c_str() << endl;
     _net_map = exec(command.c_str());
     for (size_t i{}; i<devices.size(); ++i) {
         devices[i].readStatus(_net_map);
