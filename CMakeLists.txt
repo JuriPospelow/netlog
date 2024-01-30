@@ -35,5 +35,5 @@ if(Boost_FOUND)
             $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -ggdb -std=c++2a -std=gnu++20>
             )
 
-# add_subdirectory(gtests)
+add_subdirectory(gtests)
 endif()
