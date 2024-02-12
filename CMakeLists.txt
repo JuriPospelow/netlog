@@ -25,7 +25,7 @@ if(Boost_FOUND)
         src/Device.cpp
         src/Net.cpp
         src/Nets.cpp
-        src/exec.cpp
+        # src/exec.cpp
     )
     #Link those libraries (Boost_LIBRARIES - pthread, PROJECT_LIB - log & co) into your program,
     target_link_libraries(netlog -Wl,--start-group  ${Boost_LIBRARIES} ${PROJECT_LIB} -Wl,--end-group)

@@ -17,6 +17,10 @@
 #include <boost/core/null_deleter.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
+#include <boost/process/system.hpp>
+#include <boost/process/io.hpp>
+#include <boost/asio/io_service.hpp>
+
 #include "Nets.hpp"
 
 namespace keywords = boost::log::keywords;
@@ -90,7 +94,16 @@ Net Nets::create_net(int cnt_dev, const string& tmp_name, const string& tmp_addr
 void Nets::readStatus()
 {
     for(int j{0}; j < _cnt_nets; ++j) {
-        _nets[j].readStatus(_cmd_param);
+        string command  = _cmd_param;//{"nmap -sPn --version-light --osscan-limit "};
+        command = command + " " + _nets[j].get_net_adr();
+        cout << command.c_str() << endl;
+        // _net_map = exec(command.c_str());
+        boost::asio::io_service ios;
+        std::future<std::string> result;
+        boost::process::system(command.c_str(), boost::process::std_out > result, ios);
+
+        std::string tmp  = result.get();
+        _nets[j].readStatus(tmp);
         // cout << _nets[j].get_net_adr() << endl;
     }
 }
