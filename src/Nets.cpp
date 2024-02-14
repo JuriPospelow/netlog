@@ -93,16 +93,26 @@ Net Nets::create_net(int cnt_dev, const string& tmp_name, const string& tmp_addr
 
 void Nets::readStatus()
 {
+    namespace bp = boost::process;
+
+    boost::asio::io_service ios[_cnt_nets];
+    future<std::string> result [_cnt_nets];
+    vector<bp::child> ch_array;
+
     for(int j{0}; j < _cnt_nets; ++j) {
         string command  = _cmd_param;//{"nmap -sPn --version-light --osscan-limit "};
         command = command + " " + _nets[j].get_net_adr();
         cout << command.c_str() << endl;
-        // _net_map = exec(command.c_str());
-        boost::asio::io_service ios;
-        std::future<std::string> result;
-        boost::process::system(command.c_str(), boost::process::std_out > result, ios);
 
-        std::string tmp  = result.get();
+        ch_array.push_back(bp::child (command.c_str(), bp::std_out > result[j], ios[j]));
+    }
+
+    for(int j{0}; j < _cnt_nets; ++j) {
+        ios[j].run();
+    }
+
+    for(int j{0}; j < _cnt_nets; ++j) {
+        std::string tmp  = result[j].get();
         _nets[j].readStatus(tmp);
         // cout << _nets[j].get_net_adr() << endl;
     }
