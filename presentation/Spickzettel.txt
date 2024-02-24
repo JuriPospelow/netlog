@@ -1,0 +1,21 @@
+INI File
+
+read_ini("netlog.ini", _app_config); ---- здесь используется парсер ини файла - считывает ини файл в property-tree objekt
+int room_nm = _app_config.get<int>("log.room_number"); извлекаем необходимый параметр и сохраняем его в переменной.
+
+Procces && ASIO
+
+ch_array.push_back(bp::child (command.c_str(), bp::std_out > result[j], ios[j]));
+здесь мы запускаем процесс асинхронно.
+
+ios[j].run();  //this will actually block until the compiler is finished
+Передача экземпляра boost::asio::io_service в запускающую функцию автоматически заставляет ее асинхронно ждать выхода,
+поэтому вызов wait не требуется.
+
+std::string tmp  = result[j].get();// считываем результат
+
+Logging initialization
+здесь используется синхронный тип логирования.
+параметерезируем консольный синк, затем параметерезируем файловый синк.
+в последенем используется фильтр, для того чтобы не все данные выводимые в консоль писались в файл
+и так же используется форматер для форматирования данных в csv формат.
