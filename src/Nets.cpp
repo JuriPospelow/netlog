@@ -84,7 +84,6 @@ Net Nets::create_net(int cnt_dev, const string& tmp_name, const string& tmp_addr
         tmp_net.devices.push_back({_config.get<std::string>(name_prefix+"_name"), _config.get<std::string>(name_prefix+"_addr")});
         tmp_net.set_cnt_devs(cnt_dev);
         tmp_net.set_net_adr(tmp_addr);
-        name_prefix = tmp_name;
     }
     return tmp_net;
 }
