@@ -19,9 +19,5 @@ int main(int argc, char** argv)
     auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     std::cout << "Elapsed time is " << elapsed_ms.count() << " ms\n";
 
-#if 0
-    print(nets);
-    nets.printIni();
-#endif
 return 0;
 }

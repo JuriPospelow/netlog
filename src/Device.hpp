@@ -23,8 +23,6 @@ public:
     std::string status() const { return _status;}
 
     void readStatus(std::string_view);
-    void readStatusPing();
-    void readStatusIPMI();
 
 private:
     std::string _name{"dummy"};
