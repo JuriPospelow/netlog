@@ -32,9 +32,7 @@ using namespace boost::filesystem;
 
 using namespace std;
 
-/* ToDo: use boost::asio for readStatus
-        formating for console sink
-        value pcs in room for positioning room names in the log (header_adv)
+/* ToDo: formating for console sink
 */
 
 Nets::Nets(string fileName)
@@ -173,8 +171,8 @@ void Nets::boostLogHead(tm* tm_ptr) const
     BOOST_LOG(_lg) << s;
 
     string header_adv = ",,";
-    for (int i{}; i < _rooms.size(); ++i){
-        header_adv += _rooms[i];
+    for (auto room : _rooms){
+        header_adv += room;
         header_adv += ",,,";
     }
     BOOST_LOG(_lg) << header_adv;

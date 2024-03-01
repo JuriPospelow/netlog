@@ -6,8 +6,8 @@ using namespace std;
 // #include "exec.hpp"
 void Net::readStatus(std::string& n)
 {
-    for (size_t i{}; i<devices.size(); ++i) {
-        devices[i].readStatus(n);
+    for (Device& device : devices) {
+        device.readStatus(n);
 // debug output
     //     devices[i].printAddr();
     //     cout << " " << devices[i].name() << " ";
@@ -15,4 +15,3 @@ void Net::readStatus(std::string& n)
     //     cout << devices[i].status() << endl;
     }
 }
-
