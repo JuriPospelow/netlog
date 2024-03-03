@@ -208,6 +208,7 @@ void Nets::logBody(tm *tm) const
     std::ostringstream tmp;
 
     for (auto net : _nets) {
+        tmp.flush();
         for (auto dev : net.devices) {
             tmp << setw(max(dev.name().size(), static_cast<size_t>(7) ));
             tmp_body += tmp.str() + "," + dev.status();
