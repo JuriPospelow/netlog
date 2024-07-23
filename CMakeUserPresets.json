@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "configurePresets": [
+    {
+      "name": "default",
+      "inherits": "vcpkg",
+      "environment": {
+        "VCPKG_ROOT": "/home/jpospelow/scan/code_netlog/vcpkg"
+      }
+    }
+  ]
+}
