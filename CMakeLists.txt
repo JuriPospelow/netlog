@@ -4,13 +4,12 @@ project(NETLOG)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED TRUE)
-
-set(BOOST_ROOT "/usr/local/vcpkg/installed/x64-linux/")
-set(Boost_INCLUDE_DIR  "/usr/local/vcpkg/installed/x64-linux/include")
-set(Boost_LIBRARY_DIR  "/usr/local/vcpkg/installed/x64-linux/lib")
+set(BOOST_ROOT "/home/jpospelow/scan/code_netlog/netlog/build/vcpkg_installed/x64-linux/")
+set(Boost_INCLUDE_DIR  "/home/jpospelow/scan/code_netlog/netlog/build/vcpkg_installed/x64-linux/include")
+set(Boost_LIBRARY_DIR  "/home/jpospelow/scan/code_netlog/netlog/build/vcpkg_installed/x64-linux/lib")
 
 SET(Boost_DEBUG ON)
-find_package(Boost 1.83.0 COMPONENTS log log_setup thread date_time filesystem system)
+find_package(Boost 1.85.0 COMPONENTS log log_setup thread date_time filesystem system)
 
 #Append log and log_setup into other libs:
 set(PROJECT_LIB ${PROJECT_LIB} ${Boost_LOG_LIBRARY} ${Boost_LOG_SETUP_LIBRARY})
