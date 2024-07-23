@@ -48,6 +48,7 @@ Nets::Nets(string fileName)
             _rooms.push_back(_app_config.get<string>(room_name+"_name"));
         }
         _cmd_param = _app_config.get<string>("cmd.param");
+        _output_filename = _app_config.get<string>("output.file");
 
 
         cout << "read " << fileName << "\n";
@@ -125,7 +126,7 @@ void Nets::printIni() const
 }
 // ------------------------------------------------------------------------------------------------
 
-void init()
+void Nets::initLog()
 {
     // Construct the sink for console
     typedef sinks::synchronous_sink< sinks::text_ostream_backend > text_sink;
@@ -136,7 +137,8 @@ void init()
     // Construct the sink for file
     boost::shared_ptr< sinks::text_file_backend > backend =
         boost::make_shared< sinks::text_file_backend >(
-            keywords::file_name = "netlog.csv",
+            keywords::file_name = _output_filename,
+            // keywords::file_name = "netlog.csv",
             keywords::open_mode = std::ios_base::out | std::ios_base::app // appendig to file
         );
     backend->auto_flush(true);
@@ -188,7 +190,7 @@ void Nets::boostLogHead(tm* tm_ptr) const
 void Nets::logHead(tm* tm_ptr) const
 {
 // if file exists write head only to console
-    if(exists("netlog.csv")) {
+    if(exists(_output_filename)) {
         BOOST_LOG_SCOPED_LOGGER_TAG(_lg, "Tag", "Tagged line"); // work only in the scope {}
         boostLogHead(tm_ptr);
     } else {
@@ -217,9 +219,9 @@ void Nets::logBody(tm *tm) const
     BOOST_LOG(_lg) << tmp_body;
 }
 
-void Nets::printCSV() const
+void Nets::printCSV()
 {
-    init();
+    initLog();
 
     time_t t = time(NULL);
     tm* tm = localtime(&t);

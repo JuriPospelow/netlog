@@ -13,7 +13,7 @@ public:
     void readStatus();
     void printIni() const;
     int cnt_nets() const { return _cnt_nets; }
-    void printCSV() const;
+    void printCSV();
 
 private:
     int _cnt_nets{};
@@ -23,9 +23,11 @@ private:
     mutable boost::log::sources::logger _lg;
     std::vector<Net> _nets{};
     std::string _cmd_param{};
+    std::string _output_filename{};
 
     Net create_net(int cnt_dev, const std::string& tmp_name, const std::string& );
     void logHead(tm* tm_ptr) const;
     void boostLogHead(tm* tm_ptr) const;
     void logBody(tm *tm) const;
+    void initLog();
 };
