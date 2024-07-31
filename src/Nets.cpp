@@ -99,7 +99,7 @@ void Nets::readStatus()
 
     for(int j{0}; j < _cnt_nets; ++j) {
         string command  = _cmd_param;//{"nmap -sPn --version-light --osscan-limit "};
-        command = command + " " + _nets[j].get_net_adr();
+        command = command + " " + _nets[j].get_net_adr() + + "\"";
         cout << command.c_str() << endl;
 
         ch_array.push_back(bp::child (command.c_str(), bp::std_out > result[j], ios[j]));
