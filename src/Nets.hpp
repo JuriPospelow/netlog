@@ -9,7 +9,7 @@
 
 class Nets {
 public:
-    explicit Nets(std::string fileName);
+    explicit Nets(std::string appiIni, std::string networkIni);
     void readStatus();
     void printIni() const;
     int cnt_nets() const { return _cnt_nets; }

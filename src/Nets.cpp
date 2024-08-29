@@ -35,12 +35,12 @@ using namespace std;
 /* ToDo: formating for console sink
 */
 
-Nets::Nets(string fileName)
+Nets::Nets(std::string appiIni, std::string networkIni)
 {
     try
     {
-        cout << "read " << "netlog.ini" << "\n";
-        read_ini("netlog.ini", _app_config);
+        cout << "read " << appiIni << "\n";
+        read_ini(appiIni, _app_config);
         int room_nm = _app_config.get<int>("log.room_number");
         for (int j{}; j < room_nm; ++j) {
             string room_name{"log.room"};
@@ -51,8 +51,8 @@ Nets::Nets(string fileName)
         _output_filename = _app_config.get<string>("output.file");
 
 
-        cout << "read " << fileName << "\n";
-        read_ini(fileName, _config);
+        cout << "read " << networkIni << "\n";
+        read_ini(networkIni, _config);
 
         _cnt_nets = _config.get<int>("nets.number");
 
