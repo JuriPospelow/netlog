@@ -1,4 +1,22 @@
 # netlog
+## Projektarbeit
+### Kurs C++ Developer.Basic
+#### Online-Schule Otus
+# **Thema „Dienstprogramm zur Überwachung des Zustands von Computern im lokalen Netzwerk”**
+
+netlog scannt Netzwerke, vergleicht das Scan-Ergebnis mit einer Liste bekannter Adressen und speichert das Vergleichsergebnis in einer CSV-Datei (*netlog.csv*).
+  Das Scannen der Netzwerke erfolgt durch Aufruf des Dienstprogramms nmap. Die Aufrufparameter werden in der Datei *netlog.ini* festgelegt.
+Die IP-Adressen der Geräte befinden sich in der ini-Datei, die beim Aufruf von netlog angegeben werden muss. Beispiel:
+```
+                      netlog home.ini
+```
+In dem Programm werden verwendet:
+* boost.log
+* boost.process
+* boost.asio
+* boost.property_tree
+-----------------------------------------------------------------------
+# netlog
 ## проектная работа
 ### курс C++ Developer.Basic
 #### онлайн школа Отус
